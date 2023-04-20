@@ -14,8 +14,8 @@ _setmode (_fileno (stdin), _O_BINARY);
 
 if (argc != 3)
     {
-        fprintf (stderr,"CsP slider - Create a sliding window of text from an input list\n");
-        fprintf (stderr,"usage: %s min max\n",argv[0]);
+        fprintf(stderr, "CsP slider - Create a sliding window of text from an input list\n");
+        fprintf(stderr, "usage: %s min max\n", argv[0]);
         return -1;
     }
 
@@ -29,7 +29,7 @@ if (argc != 3)
 
     if (min > max)
     {
-        fprintf(stderr,"Error, min cannot be smaller than max\n");
+        fprintf(stderr, "Error, min cannot be smaller than max\n");
         return -1;
     }
 
@@ -52,19 +52,20 @@ if (argc != 3)
             continue;
 
         size_t pos = 0;
-        for (pos = 0; pos<line_len; pos++)
+        for (pos = 0; pos < line_len; pos++)
         {
             for(size_t start = min; start <= max; start ++)
             {
-                if (pos + start  > line_len)
+                if (pos + start > line_len)
                     break;
-                memcpy(write_buffer+retBuffer,line_buff+pos,start);
-                write_buffer[retBuffer+start] = '\n';
-                retBuffer = retBuffer+start+1;
+
+                memcpy(write_buffer + retBuffer, line_buff + pos, start);
+                write_buffer[retBuffer + start] = '\n';
+                retBuffer  = retBuffer + start + 1;
 
                 if (retBuffer > 2000)
                 {
-                    fwrite(write_buffer,1,retBuffer,stdout);
+                    fwrite(write_buffer, 1, retBuffer, stdout);
                     retBuffer = 0;
                 }
             }
@@ -72,7 +73,7 @@ if (argc != 3)
 
         if (retBuffer != 0)
         {
-            fwrite(write_buffer,1,retBuffer,stdout);
+            fwrite(write_buffer, 1, retBuffer, stdout);
             fflush(stdout);
             retBuffer = 0;
         }
