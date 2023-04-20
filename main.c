@@ -3,8 +3,7 @@
 #include <string.h>
 #include <fcntl.h>
 
-char * write_buffer;
-size_t retBuffer = 0;
+#define BUFLEN (BUFSIZ * 1000)
 
 int main(int argc, char *argv[])
 {
@@ -16,28 +15,33 @@ _setmode (_fileno (stdin), _O_BINARY);
 if (argc != 3)
     {
         fprintf (stderr,"CsP slider - Create a sliding window of text from an input list\n");
-        fprintf (stderr,"usage: %s min max\n\n",argv[0]);
+        fprintf (stderr,"usage: %s min max\n",argv[0]);
         return -1;
     }
 
-    char out[BUFSIZ];
-    char line_buff[BUFSIZ * 1000];
+    char line_buff[BUFLEN];
+    char * write_buffer = NULL;
     char * p;
-    size_t line_len = 0;
+    size_t line_len  = 0;
+    size_t retBuffer = 0;
     int min = atoi(argv[1]);
     int max = atoi(argv[2]);
 
     if (min > max)
     {
-        fprintf(stderr,"Error, min cannot be smaller than max");
+        fprintf(stderr,"Error, min cannot be smaller than max\n");
         return -1;
     }
 
-    write_buffer = (char*)malloc(sizeof(line_buff)+1);
-    memset(write_buffer, 10, sizeof(write_buffer));
-    retBuffer = 0;
+    write_buffer = (char *) malloc(BUFLEN + 1);
+    if (!write_buffer)
+    {
+        fprintf(stderr, "Failed to allocate write_buffer\n");
+        return -1;
+    }
 
-    while (fgets(line_buff, sizeof line_buff,stdin) != NULL) {
+    while (fgets(line_buff, sizeof(line_buff), stdin) != NULL)
+    {
         p = line_buff + strlen(line_buff) - 1;
         if (*p == '\n') *p = '\0';
         if ((p != line_buff) && (*--p == '\r')) *p = '\0';
@@ -55,7 +59,7 @@ if (argc != 3)
                 if (pos + start  > line_len)
                     break;
                 memcpy(write_buffer+retBuffer,line_buff+pos,start);
-                write_buffer[retBuffer+start] = 10;
+                write_buffer[retBuffer+start] = '\n';
                 retBuffer = retBuffer+start+1;
 
                 if (retBuffer > 2000)
