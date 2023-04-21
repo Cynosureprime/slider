@@ -15,17 +15,23 @@ _setmode (_fileno (stdin), _O_BINARY);
         return -1;
     }
 
+    size_t min = strtoul(argv[1], NULL, 10);
+    size_t max = strtoul(argv[2], NULL, 10);
+
+    if (min < 1) {
+        fprintf(stderr, "Error, min cannot be smaller than 1\n");
+        return -1;
+    }
+
+    if (min > max) {
+        fprintf(stderr, "Error, max cannot be smaller than min\n");
+        return -1;
+    }
+
     char line_buf[BUFSIZ];
     char write_buf[BUFSIZ + 1];
     char * p;
     size_t line_len = 0;
-    int min = atoi(argv[1]);
-    int max = atoi(argv[2]);
-
-    if (min > max) {
-        fprintf(stderr, "Error, min cannot be smaller than max\n");
-        return -1;
-    }
 
     while (fgets(line_buf, sizeof(line_buf), stdin) != NULL) {
         line_len = strlen(line_buf);
