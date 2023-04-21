@@ -3,10 +3,7 @@
 #include <string.h>
 #include <fcntl.h>
 
-#define BUFLEN (BUFSIZ * 1000)
-
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
 
 #ifdef _WINDOWS
 _setmode (_fileno (stdin), _O_BINARY);
@@ -18,8 +15,8 @@ _setmode (_fileno (stdin), _O_BINARY);
         return -1;
     }
 
-    char line_buf[BUFLEN];
-    char * write_buf = NULL;
+    char line_buf[BUFSIZ];
+    char write_buf[BUFSIZ + 1];
     char * p;
     size_t line_len = 0;
     int min = atoi(argv[1]);
@@ -27,12 +24,6 @@ _setmode (_fileno (stdin), _O_BINARY);
 
     if (min > max) {
         fprintf(stderr, "Error, min cannot be smaller than max\n");
-        return -1;
-    }
-
-    write_buf = (char *) malloc(BUFLEN + 1);
-    if (!write_buf) {
-        fprintf(stderr, "Failed to allocate write_buf\n");
         return -1;
     }
 
