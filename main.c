@@ -45,6 +45,7 @@ _setmode (_fileno (stdin), _O_BINARY);
         }
 
         for (size_t pos = 0; pos < line_len; pos++) {
+            if ((line_len - pos) < min) break;
             memcpy(write_buf, line_buf + pos, line_len - pos);
             write_buf[line_len - pos] = '\0';
 
