@@ -28,13 +28,14 @@ _setmode (_fileno (stdin), _O_BINARY);
     }
 
     while (fgets(line_buf, sizeof(line_buf), stdin) != NULL) {
-        p = line_buf + strlen(line_buf) - 1;
+        line_len = strlen(line_buf);
+
+        if (line_len == 0) continue;
+        if (min > line_len) continue;
+
+        p = line_buf + line_len - 1;
         if (*p == '\n') *p = '\0';
         if ((p != line_buf) && (*--p == '\r')) *p = '\0';
-
-        line_len = strlen(line_buf);
-        if (min > line_len)
-            continue;
 
         for (size_t pos = 0; pos < line_len; pos++) {
             memcpy(write_buf, line_buf + pos, line_len - pos);
