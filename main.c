@@ -23,7 +23,6 @@ if (argc != 3)
     char * write_buffer = NULL;
     char * p;
     size_t line_len  = 0;
-    size_t retBuffer = 0;
     int min = atoi(argv[1]);
     int max = atoi(argv[2]);
 
@@ -47,35 +46,23 @@ if (argc != 3)
         if ((p != line_buff) && (*--p == '\r')) *p = '\0';
 
         line_len = strlen(line_buff);
-
         if (min > line_len)
             continue;
 
-        size_t pos = 0;
-        for (pos = 0; pos < line_len; pos++)
+        for (size_t pos = 0; pos < line_len; pos++)
         {
-            for(size_t start = min; start <= max; start ++)
-            {
-                if (pos + start > line_len)
-                    break;
+            memcpy(write_buffer, line_buff + pos, line_len - pos);
+            write_buffer[line_len - pos] = '\0';
 
-                memcpy(write_buffer + retBuffer, line_buff + pos, start);
-                write_buffer[retBuffer + start] = '\n';
-                retBuffer  = retBuffer + start + 1;
-
-                if (retBuffer > 2000)
-                {
-                    fwrite(write_buffer, 1, retBuffer, stdout);
-                    retBuffer = 0;
-                }
+            size_t end = line_len - pos;
+            if (end > max) {
+                end = max;
             }
-        }
 
-        if (retBuffer != 0)
-        {
-            fwrite(write_buffer, 1, retBuffer, stdout);
-            fflush(stdout);
-            retBuffer = 0;
+            for(size_t cur = end; cur >= min; cur--) {
+                write_buffer[cur] = '\0';
+                puts(write_buffer);
+            }
         }
     }
 }
