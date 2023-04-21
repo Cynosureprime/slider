@@ -34,8 +34,15 @@ _setmode (_fileno (stdin), _O_BINARY);
         if (min > line_len) continue;
 
         p = line_buf + line_len - 1;
-        if (*p == '\n') *p = '\0';
-        if ((p != line_buf) && (*--p == '\r')) *p = '\0';
+        if (*p == '\n') {
+            *p = '\0';
+            line_len--;
+        }
+
+        if ((p != line_buf) && (*--p == '\r')) {
+            *p = '\0';
+            line_len--;
+        }
 
         for (size_t pos = 0; pos < line_len; pos++) {
             memcpy(write_buf, line_buf + pos, line_len - pos);
