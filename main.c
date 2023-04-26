@@ -9,9 +9,9 @@ int main(int argc, char *argv[]) {
 _setmode (_fileno (stdin), _O_BINARY);
 #endif // _WINDOWS
 
-    if (argc != 3) {
+    if (argc < 3 || argc > 5) {
         fprintf(stderr, "CsP slider - Create a sliding window of text from an input list\n");
-        fprintf(stderr, "usage: %s min max\n", argv[0]);
+        fprintf(stderr, "usage: %s min max [lower] [upper]\n", argv[0]);
         return -1;
     }
 
@@ -26,6 +26,24 @@ _setmode (_fileno (stdin), _O_BINARY);
     if (min > max) {
         fprintf(stderr, "Error, max cannot be smaller than min\n");
         return -1;
+    }
+
+    size_t lower = 0;
+    size_t upper = 0;
+    int enforce = 0;
+    if (argc > 3) {
+        lower = strtoul(argv[3], NULL, 10);
+        upper = strtoul(argv[4], NULL, 10);
+
+        if (lower < 0) {
+            fprintf(stderr, "Error, lower cannot be smaller than 0\n");
+            return -1;
+        }
+
+        if (lower > upper) {
+            enforce = 1;
+        }
+
     }
 
     char line_buf[BUFSIZ];
@@ -50,7 +68,10 @@ _setmode (_fileno (stdin), _O_BINARY);
             line_len--;
         }
 
-        for (size_t pos = 0; pos < line_len; pos++) {
+        if (enforce == 1) upper = line_len;
+        else if (line_len > upper) line_len = upper;
+
+        for (size_t pos = lower; pos < line_len; pos++) {
             if ((line_len - pos) < min) break;
             memcpy(write_buf, line_buf + pos, line_len - pos);
             write_buf[line_len - pos] = '\0';
