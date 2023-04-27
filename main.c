@@ -40,9 +40,10 @@ _setmode (_fileno (stdin), _O_BINARY);
             return -1;
         }
 
-        if (lower > upper) {
+        if (lower < upper) {
             enforce = 1;
         }
+
 
     }
 
@@ -68,7 +69,7 @@ _setmode (_fileno (stdin), _O_BINARY);
             line_len--;
         }
 
-        if (enforce == 1) upper = line_len;
+        if (enforce == 0) upper = line_len;
         else if (line_len > upper) line_len = upper;
 
         for (size_t pos = lower; pos < line_len; pos++) {
