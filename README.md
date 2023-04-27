@@ -17,7 +17,7 @@ ometexth\
 
 This tool can be used to blindly extract phrases from various inputs, alternatively it can be used to parse data dumps in a brute-force manner without having to understand the data format as it would remove all tags and formatting associated with the input.
 ## Usage
-`stdin | slider min-len max-len [min] [max]`
+`stdin | slider min max [lower] [upper]`
 
 ## Examples
 Linux:
