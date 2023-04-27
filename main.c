@@ -35,8 +35,8 @@ _setmode (_fileno (stdin), _O_BINARY);
         lower = strtoul(argv[3], NULL, 10);
         upper = strtoul(argv[4], NULL, 10);
 
-        if (lower < 0) {
-            fprintf(stderr, "Error, lower cannot be smaller than 0\n");
+        if (lower < 1) {
+            fprintf(stderr, "Error, lower cannot be smaller than 1\n");
             return -1;
         }
 
@@ -44,7 +44,7 @@ _setmode (_fileno (stdin), _O_BINARY);
             enforce = 1;
         }
 
-
+        lower--;
     }
 
     char line_buf[BUFSIZ];
@@ -69,8 +69,11 @@ _setmode (_fileno (stdin), _O_BINARY);
             line_len--;
         }
 
-        if (enforce == 0) upper = line_len;
-        else if (line_len > upper) line_len = upper;
+        if (enforce == 0) {
+            upper = line_len;
+        } else if (line_len > upper) {
+            line_len = upper;
+        }
 
         for (size_t pos = lower; pos < line_len; pos++) {
             if ((line_len - pos) < min) break;
