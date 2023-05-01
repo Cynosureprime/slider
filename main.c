@@ -3,6 +3,8 @@
 #include <string.h>
 #include <fcntl.h>
 
+static char *version = "1.0";
+
 int main(int argc, char *argv[]) {
 
 #ifdef _WINDOWS
@@ -10,7 +12,7 @@ _setmode (_fileno (stdin), _O_BINARY);
 #endif // _WINDOWS
 
     if (argc < 3 || argc > 5) {
-        fprintf(stderr, "CsP slider - Create a sliding window of text from an input list\n");
+        fprintf(stderr, "CsP slider %s - Create a sliding window of text from an input list\n", version);
         fprintf(stderr, "usage: %s min max [lower] [upper]\n", argv[0]);
         return -1;
     }
