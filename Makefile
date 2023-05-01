@@ -16,7 +16,7 @@ all: slider
 win: slider.exe
 
 clean:
-	rm -f slider slider.exe slider.fuzz slider.zip
+	rm -f slider slider.exe slider.fuzz slider$(VERSION).zip
 
 fuzz: slider.fuzz
 
@@ -32,4 +32,4 @@ slider.fuzz: main.c
 release: clean slider win
 	mkdir -p $(TMPDIR)
 	cp slider slider.exe $(TMPDIR)
-	7z a slider.zip $(TMPDIR)
+	7z a slider-$(VERSION).zip $(TMPDIR)
